@@ -1,0 +1,36 @@
+import time
+import win32api
+import pyautogui
+from time import sleep, strftime
+import os
+from datetime import datetime
+
+idle_action = 40
+shutdown_time = '17:45:30'
+pyautogui.FAILSAFE = False
+
+def getidletime():
+    return (win32api.GetTickCount() - win32api.GetLastInputInfo()) / 1000.0
+
+
+while True:
+    sys_idle = getidletime()
+
+    if strftime('%H:%M:%S') >= shutdown_time:
+        os.system("shutdown /s /t 1")
+
+    if sys_idle >= idle_action:
+        timediff = datetime.strptime(shutdown_time, '%H:%M:%S') - datetime.strptime(strftime('%H:%M:%S'), '%H:%M:%S')
+        print("Laptop will shutdown in " + str(timediff))
+        print(sys_idle)
+
+        pyautogui.keyDown('alt')
+        time.sleep(.2)
+        pyautogui.press('tab')
+        time.sleep(.2)
+        pyautogui.press('tab')
+        time.sleep(.2)
+        pyautogui.keyUp('alt')
+
+
+
